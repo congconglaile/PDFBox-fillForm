@@ -4,9 +4,15 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
+
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+//import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 public class FillFormField {
 
@@ -69,6 +75,71 @@ public class FillFormField {
              *  Throws: IOException - if the output could not be written
              */
             pdfDocument.save("resources/after/FillFormField.pdf");
+
+            PDDocument document = new PDDocument();
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            //      PDFont font = PDTrueTypeFont.loadTTF(document, new File("SIMSUN.TTC"));
+            PDFont font = PDType1Font.HELVETICA_BOLD;
+            /**
+             *  Function: new PDPageContentStream(document, page)
+             *  Description: Create a new PDPage content stream.
+             *  Parameters: document - The document the page is part of.
+             *  Parameters: sourcePage - The page to write the contents to.
+             *  Throws: IOException  - If there is an error writing to the page contents.
+             */
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            /**
+             *  Function: beginText()
+             *  Description: Begin some text operations.
+             *  Throws: IOException - If there is an error writing to the stream or if you attempt to nest beginText calls.
+             */
+            contentStream.beginText();
+            /**
+             *  Function: setFont(PDFont font, float fontSize)
+             *  Description: Set the font and font size to draw text with.
+             *  Parameters: font - The font to use.
+             *  Parameters: fontSize - The font size to draw the text.
+             *  Throws: IOException - If there is an error writing the font information.
+             */
+            contentStream.setFont(font, 14);
+            /**
+             *  Function: newLineAtOffset(float tx, float ty)
+             *  Description: The Td operator. Move to the start of the next line, offset from the start of the current line by (tx, ty).
+             *  Parameters: tx - The x translation.
+             *  Parameters: ty - The y translation.
+             *  Throws: IOException - If there is an error writing to the stream.
+             *  Throws: IllegalStateException - If the method was not allowed to be called at this time.
+             */
+            contentStream.newLineAtOffset(100, 700);
+            /**
+             *  Function: showText(String text)
+             *  Description: Shows the given text at the location specified by the current text matrix.
+             *  Parameters: text - The Unicode text to show.
+             *  Throws: IOException - If an io exception occurs.
+             */
+            contentStream.showText("name:yf l");
+            contentStream.newLineAtOffset(50, 50);
+            contentStream.showText("gender:female");
+            /**
+             *  Function: endText()
+             *  Description: End some text operations.
+             *  Throws: IOException - If there is an error writing to the stream or if you attempt to nest endText calls.
+             *  Throws: IllegalStateException - If the method was not allowed to be called at this time.
+             */
+            contentStream.endText();
+            /**
+             *  Function: close()
+             *  Description: Close the content stream. This must be called when you are done with this object.
+             *  Throws: IOException - If the underlying stream has a problem being written to.
+             */
+            contentStream.close();
+
+
+            document.save("resources/new/new.pdf");
+
+            document.close();
 
         }catch (IOException e){
             System.out.println(e.toString());
